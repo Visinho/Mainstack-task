@@ -1,6 +1,6 @@
 import express from "express";
-import { authentication, random } from "helpers";
-import { createUser, getUserByEmail } from "models/users";
+import { authentication, random } from "../helpers/index";
+import { createUser, getUserByEmail } from "../models/users";
 
 export const register = async (req: express.Request, res: express.Response) => {
     try {
@@ -22,8 +22,10 @@ export const register = async (req: express.Request, res: express.Response) => {
                 salt, password: authentication(salt, password)
             }
         })
+        console.log(user)
         return res.status(200).json(user).end();
     } catch (error) {
+        console.log(error);
         return res.sendStatus(400);
     }
 }
