@@ -16,14 +16,30 @@ export const isAuthenticated = async (req: express.Request, res: express.Respons
             return res.sendStatus(403);
         }
 
-        // Assuming merge properly merges the user identity into the request object
         merge(req, { identity: existingUser });
 
-        // Call next to pass control to the next middleware
         next();
     } catch (error) {
         console.error(error);
-        // Return a generic server error status code
         return res.sendStatus(500);
     }
 }
+
+// export const isOwner = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+//     try {
+//         const { id } = req.params;
+//         const currentUserId = get(req, "identity._id") as string;
+
+//         if(!currentUserId) {
+//             return res.sendStatus(403);
+//         }
+
+//         if(currentUserId !== id) {
+//             return res.sendStatus(403);
+//         }
+//         next();
+//     } catch (error) {
+//         console.log(error);
+//         return res.sendStatus(400);
+//     }
+// }
