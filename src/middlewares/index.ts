@@ -6,19 +6,24 @@ import { getUserBySessionToken } from "../models/users";
 export const isAuthenticated = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
         const sessionToken = req.cookies["session_token"];
-        if(!sessionToken) {
+        if (!sessionToken) {
             return res.sendStatus(403);
         }
 
         const existingUser = await getUserBySessionToken(sessionToken);
 
-        if(!existingUser) {
+        if (!existingUser) {
             return res.sendStatus(403);
         }
 
-        merge(req, { identity: existingUser});
+        // Assuming merge properly merges the user identity into the request object
+        merge(req, { identity: existingUser });
+
+        // Call next to pass control to the next middleware
+        next();
     } catch (error) {
-        console.log(error);
-        return res.sendStatus(400);
+        console.error(error);
+        // Return a generic server error status code
+        return res.sendStatus(500);
     }
 }
